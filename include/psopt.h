@@ -31,7 +31,7 @@ using std::numeric_limits;
 
 namespace PSOPT {
     constexpr double inf        =   std::numeric_limits<double>::infinity();
-    constexpr double pi         =   4.0*atan(1.0);
+    constexpr double pi         =   std::numbers::pi;
 }
 
 

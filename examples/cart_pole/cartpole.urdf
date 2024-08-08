@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<robot name="cartpole">
+  <!-- [CAUTION] disable discardvisual to preserve visual geometries  -->
+  <mujoco>
+    <compiler discardvisual="false"/>
+  </mujoco>
+
+
+  <!-- cartpole model from -->
+  <!-- An Introduction to Trajectory Optimization: How to Do Your Own Direct Collocation -->
+  <!-- https://doi.org/10.1137/16M1062569 -->
+  <link name="world"></link>
+
+  <link name="cart">
+    <inertial>
+      <mass value="2"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <box size="0.2 0.1 0.1"/>
+      </geometry>
+      <origin xyz="0 0 0"/>
+      <material name="blue">
+        <color rgba="0 0 1 0.5"/>
+      </material>
+    </visual>
+  </link>
+
+  <link name="pole">
+    <inertial>
+      <origin xyz="0 0 -0.5"/>
+      <mass value="0.5"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <cylinder radius="0.01" length="0.5"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 -0.25"/>
+      <material name="white">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 -0.5"/>
+      <geometry name="mass_visual">
+        <sphere radius="0.05"/>
+      </geometry>
+      <material name="red">
+        <color rgba="1 0 0 0.5"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="cart_joint" type="prismatic">
+    <axis xyz="1 0 0"/>
+    <origin xyz="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="cart"/>
+    <limit effort="1000.0" lower="-15" upper="15" velocity="5"/>
+  </joint>
+
+  <!-- [CAUTION] Do not use continuous! -->
+  <joint name="pole_joint" type="revolute">
+    <axis xyz="0 -1 0"/>
+    <parent link="cart"/>
+    <child link="pole"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <limit effort="0" lower="-6.283" upper="6.283" velocity="100"/>
+  </joint>
+
+</robot>
